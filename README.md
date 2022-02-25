@@ -1,7 +1,7 @@
-export lonode cluster config to local KUBECONFIG
-`export KUBECONFIG=kubeconfig/kubedb-dashboard-kubeconfig.yaml`
+- export lonode cluster config to local **KUBECONFIG**
+  `export KUBECONFIG=kubeconfig/kubedb-dashboard-kubeconfig.yaml`
 
-install kubedb
+install **kubedb**
 ```
 helm repo update
 helm install kubedb appscode/kubedb \  

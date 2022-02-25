@@ -1,5 +1,5 @@
 export lonode cluster config to local KUBECONFIG
-`export KUBECONFIG=~/Downloads/kubedb-dashboard-kubeconfig.yaml`
+`export KUBECONFIG=~/kubeconfig/kubedb-dashboard-kubeconfig.yaml`
 
 install kubedb
 ```

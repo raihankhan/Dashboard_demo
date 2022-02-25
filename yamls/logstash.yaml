@@ -29,8 +29,8 @@ data:
     output {
         elasticsearch {
         user => "elastic"
-        password => "Ly~*qHmYe6t0D8Fn"
-        hosts => ["https://es-topology:9200" , "https://es-topology.demo:9200" , "https://es-topology.demo.svc:9200"]
+        password => "wi0I&FLum.2mFfOn"
+        hosts => ["https://es-topology:9200"]
         cacert => "/usr/share/logstash/certs/ca.crt"
         ssl_certificate_verification => false
         ilm_rollover_alias => "k8s-log"

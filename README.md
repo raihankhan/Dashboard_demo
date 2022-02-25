@@ -34,13 +34,13 @@ kubectl get secret -n demo es-topology-elastic-cred -o jsonpath='{.data.password
 
 set ilm policy  (name it k8s-log)
 set Hot Phase 
->> Maximum primary shard size to 1 MB
->> Maximum age to 1 minutes
->> Maximum documents to 1000
+- Maximum primary shard size to 1 MB
+- Maximum age to 1 minutes
+- Maximum documents to 1000
 set Warm Phase
->>  Move data into phase when: 1 minutes old
+- Move data into phase when: 1 minutes old
 set Cold Phase
->>  Move data into phase when: 2/3 minutes old
+- Move data into phase when: 2/3 minutes old
 
 set elastic search credential in logstash yaml
 

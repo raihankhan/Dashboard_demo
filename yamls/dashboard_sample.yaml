@@ -1,0 +1,9 @@
+apiVersion: dashboard.kubedb.com/v1alpha1
+kind: ElasticsearchDashboard
+metadata:
+  name: ed-sample
+  namespace: demo
+spec:
+  enableSSL: true
+  databaseRef:
+    name: es-topology

@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-configmap
+  namespace: demo
+data:
+  logstash.yml: |
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline
+  logstash.conf: |
+    # all input will come from filebeat, no local logs
+    input {
+      beats {
+        port => 5044
+      }
+    }
+    filter {
+      if [message] =~ /^\{.*\}$/ {
+        json {
+          source => "message"
+        }
+      }
+      if [ClientHost] {
+        geoip {
+          source => "ClientHost"
+        }
+      }
+    }
+    output {
+        elasticsearch {
+        user => "elastic"
+        password => "Ly~*qHmYe6t0D8Fn"
+        hosts => ["https://es-topology:9200" , "https://es-topology.demo:9200" , "https://es-topology.demo.svc:9200"]
+        cacert => "/usr/share/logstash/certs/ca.crt"
+        ssl_certificate_verification => false
+        ilm_rollover_alias => "k8s-log"
+        ilm_pattern => "000001"
+        ilm_policy => "k8s-log"
+        }
+    }
+---
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: logstash
+  namespace: demo
+spec:
+  selector:
+    matchLabels:
+      name: logstash
+  template:
+    metadata:
+      labels:
+        name: logstash
+    spec:
+      containers:
+       - name: logstash
+         image: logstash:7.14.0
+         ports:
+         - containerPort: 5044
+         volumeMounts:
+         - name: logstash-pipeline-volume
+           mountPath: /usr/share/logstash/pipeline
+         - name: config-volume
+           mountPath: /usr/share/logstash/config
+         - name: ca
+           mountPath: /usr/share/logstash/certs
+         command:
+         - logstash
+      volumes:
+       - name: config-volume
+         configMap:
+          name: logstash-configmap
+          items:
+          - key: logstash.yml
+            path: logstash.yml
+       - name: logstash-pipeline-volume
+         configMap:
+          name: logstash-configmap
+          items:
+          - key: logstash.conf
+            path: logstash.conf
+       - name: ca
+         secret:
+          secretName: es-topology-archiver-cert
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: demo
+  name: logstash-service
+  labels:
+    name: logstash
+spec:
+  selector:
+      name: logstash
+  ports:
+    - port: 5044
+      protocol: TCP
+      targetPort: 5044
+  type: ClusterIP

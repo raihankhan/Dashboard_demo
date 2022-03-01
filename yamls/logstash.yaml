@@ -14,37 +14,40 @@ data:
         port => 5044
       }
     }
-    filter {
-      if [message] =~ /^\{.*\}$/ {
-        json {
-          source => "message"
-        }
-      }
-      if [ClientHost] {
-        geoip {
-          source => "ClientHost"
-        }
-      }
-    }
+    # filter {
+    #   if [message] =~ /^\{.*\}$/ {
+    #     json {
+    #       source => "message"
+    #     }
+    #   }
+    #   if [ClientHost] {
+    #     geoip {
+    #       source => "ClientHost"
+    #     }
+    #   }
+    # }
     output {
         elasticsearch {
         user => "elastic"
-        password => "wi0I&FLum.2mFfOn"
-        hosts => ["https://es-topology:9200"]
+        password => "yvJK&orHx_vowlA5"
+        hosts => ["https://es-cluster.demo.svc:9200"]
         cacert => "/usr/share/logstash/certs/ca.crt"
         ssl_certificate_verification => false
-        ilm_rollover_alias => "k8s-log"
+        ilm_rollover_alias => "k8s-logs"
         ilm_pattern => "000001"
-        ilm_policy => "k8s-log"
+        ilm_policy => "k8s-logs"
+        template_name => "k8s-logs"
+        ecs_compatibility => "v1"
         }
     }
 ---
-kind: DaemonSet
+kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: logstash
   namespace: demo
 spec:
+  replicas: 1
   selector:
     matchLabels:
       name: logstash
@@ -67,6 +70,13 @@ spec:
            mountPath: /usr/share/logstash/certs
          command:
          - logstash
+         resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
       volumes:
        - name: config-volume
          configMap:
@@ -82,7 +92,7 @@ spec:
             path: logstash.conf
        - name: ca
          secret:
-          secretName: es-topology-archiver-cert
+          secretName: es-cluster-archiver-cert
 ---
 kind: Service
 apiVersion: v1

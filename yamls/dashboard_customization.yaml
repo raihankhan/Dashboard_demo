@@ -1,17 +1,17 @@
 apiVersion: dashboard.kubedb.com/v1alpha1
 kind: ElasticsearchDashboard
 metadata:
-  name: elasticsearchdashboard-sample
+  name: es-cluster-dashboard
   namespace: demo
 spec:
   replicas: 1
   enableSSL: true
 
   authSecret:
-    name: es-topology-elastic-cred
+    name: es-cluster-user-cred
 
   databaseRef:
-    name: es-topology
+    name: es-cluster
 
   serviceTemplates:
     - alias: primary
@@ -22,6 +22,6 @@ spec:
   tls:
     certificates:
       - alias: database-client
-        secretName: es-topology-archiver-cert
+        secretName: es-cluster-client-cert
 
   terminationPolicy: WipeOut

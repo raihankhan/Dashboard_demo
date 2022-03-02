@@ -7,3 +7,4 @@ spec:
   enableSSL: true
   databaseRef:
     name: es-cluster
+  terminationPolicy: WipeOut

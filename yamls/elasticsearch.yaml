@@ -1,0 +1,54 @@
+apiVersion: kubedb.com/v1alpha2
+kind: Elasticsearch
+metadata:
+  name: es-cluster
+  namespace: log-manager
+spec:
+  enableSSL: true
+  version: xpack-7.14.0
+  topology:
+      master:
+        replicas: 2
+        storage:
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: "standard"
+      ingest:
+        replicas: 2
+        storage:
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: "standard"
+      dataContent:
+        replicas: 1
+        storage:
+          resources:
+            requests:
+              storage: 5Gi
+          storageClassName: "fast"
+        suffix: data
+      dataHot:
+        replicas: 3
+        storage:
+          resources:
+            requests:
+              storage: 3Gi
+          storageClassName: "fast"
+        suffix: data-hot
+      dataWarm:
+        replicas: 2
+        storage:
+          resources:
+            requests:
+              storage: 5Gi
+          storageClassName: "slow"
+      dataCold:
+        replicas: 2
+        storage:
+          resources:
+            requests:
+              storage: 5Gi
+          storageClassName: "slow"
+

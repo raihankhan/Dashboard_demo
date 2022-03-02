@@ -2,7 +2,7 @@ apiVersion: dashboard.kubedb.com/v1alpha1
 kind: ElasticsearchDashboard
 metadata:
   name: es-cluster-dashboard
-  namespace: demo
+  namespace: log-manager
 spec:
   enableSSL: true
   databaseRef:

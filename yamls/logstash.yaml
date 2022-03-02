@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: logstash-configmap
-  namespace: demo
+  namespace: log-manager
 data:
   logstash.yml: |
     http.host: "0.0.0.0"
@@ -14,30 +14,20 @@ data:
         port => 5044
       }
     }
-    # filter {
-    #   if [message] =~ /^\{.*\}$/ {
-    #     json {
-    #       source => "message"
-    #     }
-    #   }
-    #   if [ClientHost] {
-    #     geoip {
-    #       source => "ClientHost"
-    #     }
-    #   }
-    # }
+    filter {
+     
+    }
     output {
         elasticsearch {
         user => "elastic"
-        password => "yvJK&orHx_vowlA5"
-        hosts => ["https://es-cluster.demo.svc:9200"]
+        password => "pMLnLeDFzTL$9Uc5"
+        hosts => ["https://es-cluster.log-manager.svc:9200"]
         cacert => "/usr/share/logstash/certs/ca.crt"
         ssl_certificate_verification => false
         ilm_rollover_alias => "k8s-logs"
         ilm_pattern => "000001"
         ilm_policy => "k8s-logs"
         template_name => "k8s-logs"
-        ecs_compatibility => "v1"
         }
     }
 ---
@@ -45,7 +35,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: logstash
-  namespace: demo
+  namespace: log-manager
 spec:
   replicas: 1
   selector:
@@ -97,7 +87,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: demo
+  namespace: log-manager
   name: logstash-service
   labels:
     name: logstash

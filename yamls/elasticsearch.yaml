@@ -28,7 +28,6 @@ spec:
             requests:
               storage: 5Gi
           storageClassName: "fast"
-        suffix: data
       dataHot:
         replicas: 3
         storage:
@@ -36,7 +35,6 @@ spec:
             requests:
               storage: 3Gi
           storageClassName: "fast"
-        suffix: data-hot
       dataWarm:
         replicas: 2
         storage:

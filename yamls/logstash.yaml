@@ -20,7 +20,7 @@ data:
     output {
         elasticsearch {
         user => "elastic"
-        password => "pMLnLeDFzTL$9Uc5"
+        password => "p3KAOdO$mypJ~ZnV"
         hosts => ["https://es-cluster.log-manager.svc:9200"]
         cacert => "/usr/share/logstash/certs/ca.crt"
         ssl_certificate_verification => false

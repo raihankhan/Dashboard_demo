@@ -1,8 +1,8 @@
-export lonode cluster config to local **KUBECONFIG**
+export linode cluster config to local **KUBECONFIG**
 
 `export KUBECONFIG=kubeconfig/kubedb-dashboard-kubeconfig.yaml`
 
-install **kubedb**
+install **KubeDB**
 
 ```bash
 helm repo update
